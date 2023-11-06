@@ -346,8 +346,19 @@ class CityScreen(
 
     private fun tileWorkedIconOnClick(tileGroup: CityTileGroup, city: City) {
 
-        if (!canChangeState || city.isPuppet) return
+        if (!canChangeState) return
+        
         val tile = tileGroup.tile
+
+        /** [UniqueType.MayBuyTitlesInPuppets] support - some civs could buy titles in puppets */
+        if (city.isPuppet) {
+            if (!city.civ.hasUnique(UniqueType.MayBuyTitlesInPuppets)) return // return here for most cases
+
+            if (tileGroup.tileState == CityTileState.PURCHASABLE) {
+                askToBuyTile(tile)
+            }
+            return
+        }
 
         // Cycling as: Not-worked -> Worked  -> Not-worked
         if (tileGroup.tileState == CityTileState.WORKABLE) {
@@ -412,7 +423,9 @@ class CityScreen(
     }
 
     private fun tileGroupOnClick(tileGroup: CityTileGroup, city: City) {
-        if (city.isPuppet) return
+        // [UniqueType.MayBuyTitlesInPuppets] support - there may be civs that could buy titles in puppets 
+        if (city.isPuppet && !city.civ.hasUnique(UniqueType.MayBuyTitlesInPuppets)) return
+        
         val tileInfo = tileGroup.tile
 
         /** [UniqueType.CreatesOneImprovement] support - select tile for improvement */

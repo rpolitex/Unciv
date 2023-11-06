@@ -56,8 +56,9 @@ class CityExpansionManager : IsPartOfGameInfoSerialization {
     }
 
     fun canBuyTile(tile: Tile): Boolean {
-        return when {
-            city.isPuppet || city.isBeingRazed -> false
+        return when {            
+            city.isPuppet && !city.civ.hasUnique(UniqueType.MayBuyTitlesInPuppets) -> false /** [UniqueType.MayBuyTitlesInPuppets] support - there may be civs that could buy titles in puppets */
+            city.isBeingRazed -> false
             tile.getOwner() != null -> false
             city.isInResistance() -> false
             tile !in city.tilesInRange -> false

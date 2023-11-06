@@ -80,7 +80,7 @@ class CityScreenTileTable(private val cityScreen: CityScreen) : Table() {
                     update(selectedTile)
                     cityScreen.update()
                 }
-                if (!cityScreen.canChangeState) unlockButton.disable()
+                if (!cityScreen.canChangeState || city.isPuppet) unlockButton.disable()
                 innerTable.add(unlockButton).padTop(5f).row()
             } else {
                 val lockButton = "Lock".toTextButton()
@@ -89,7 +89,7 @@ class CityScreenTileTable(private val cityScreen: CityScreen) : Table() {
                     update(selectedTile)
                     cityScreen.update()
                 }
-                if (!cityScreen.canChangeState) lockButton.disable()
+                if (!cityScreen.canChangeState || city.isPuppet) lockButton.disable()
                 innerTable.add(lockButton).padTop(5f).row()
             }
         }
